@@ -1,3 +1,14 @@
+# DEL EDITOR
+.idea/
+*.iml
+out/
+.attach_pid*
+src/Secret/*
+!src/Secret/README.md
+
+triggers/
+
+
 # Compiled class file
 *.class
 
