@@ -55,6 +55,65 @@ public class SistemaTorneo
 		}
 	}
 
+	////////////////////////////////////////////////////////
+	/**************** Métodos Principales *****************/
+	////////////////////////////////////////////////////////
+
+	public void AsignarParejaEntrenador(String DNIJ1, String DNIJ2, String DNIEnt, int codEd)
+	{
+		try
+		{
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+
+	public void PagarCompra(int codCompraFinalizada)
+	{
+		try
+		{
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+
+	public void HacerOfertaArbitro(String DNIArb, int codEd, float dineroOfrecido)
+	{
+		try
+		{
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+
+	public void AniadirPartido(String DNIJ1L, String DNIJ2L, String DNIJ1V, String DNIJ2V, String DNIArb
+		, Date fecha, int numPista, int codEd)
+	{
+		try
+		{
+
+		}
+		catch (Exception e)
+		{
+			System.out.println(e.toString());
+		}
+	}
+
+	public void EliminarColaborador(String CIF, int codEd)
+	{
+
+	}
+
+
 	public void FinalizarConexion()
 	{
 		try
@@ -68,7 +127,7 @@ public class SistemaTorneo
 		}
 		catch (SQLException e)
 		{
-			//MostrarError(e.toString());
+			//MostrarError(e.toString()); Hello
 		}
 
 		System.out.println(ConsoleColors.PURPLE + "<> Finalizando Sistema <>" + ConsoleColors.RESET);
