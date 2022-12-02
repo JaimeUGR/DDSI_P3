@@ -1,6 +1,8 @@
 package SI;
 
 import ConsoleColors.ConsoleColors;
+import ConsoleErrors.ConsoleError;
+
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 
@@ -26,6 +28,7 @@ public class MenuSistema
 		}
 		catch (NumberFormatException e)
 		{
+			ConsoleError.MostrarError(e.toString());
 			opcion = -1;
 		}
 
@@ -43,6 +46,7 @@ public class MenuSistema
 		}
 		catch (NumberFormatException e)
 		{
+			ConsoleError.MostrarError(e.toString());
 			decimal = -1;
 		}
 
@@ -67,7 +71,7 @@ public class MenuSistema
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.toString());
+			ConsoleError.MostrarError(e.toString());
 			fecha = new java.util.Date(System.currentTimeMillis());
 		}
 
@@ -154,7 +158,7 @@ public class MenuSistema
 		System.out.print("DNI Árbitro >> ");
 		DNIArb = LeerCadena();
 
-		System.out.print("Fecha >> ");
+		System.out.print("Fecha (dd/MM/yyyy HH:mm:ss) >> ");
 		fecha = new java.sql.Date(LeerFecha().getTime());
 
 		System.out.print("Número de Pista >> ");

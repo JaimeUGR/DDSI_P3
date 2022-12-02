@@ -3,6 +3,7 @@ package SI;
 import java.sql.*;
 
 import ConsoleColors.ConsoleColors;
+import ConsoleErrors.ConsoleError;
 import Secret.SecretDB;
 
 public class SistemaTorneo
@@ -28,8 +29,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			//MostrarError(e.toString());
-			System.out.println(e.toString());
+			ConsoleError.MostrarError(e.toString());
 			con = null;
 		}
 	}
@@ -51,7 +51,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.toString());
+			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
@@ -59,7 +59,7 @@ public class SistemaTorneo
 	/**************** Métodos Principales *****************/
 	////////////////////////////////////////////////////////
 
-	public void AsignarParejaEntrenador(String DNIJ1, String DNIJ2, String DNIEnt, int codEd)
+	void AsignarParejaEntrenador(String DNIJ1, String DNIJ2, String DNIEnt, int codEd)
 	{
 		try
 		{
@@ -67,11 +67,11 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.toString());
+			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	public void PagarCompra(int codCompraFinalizada)
+	void PagarCompra(int codCompraFinalizada)
 	{
 		try
 		{
@@ -79,11 +79,11 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.toString());
+			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	public void HacerOfertaArbitro(String DNIArb, int codEd, float dineroOfrecido)
+	void HacerOfertaArbitro(String DNIArb, int codEd, float dineroOfrecido)
 	{
 		try
 		{
@@ -91,11 +91,11 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.toString());
+			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	public void AniadirPartido(String DNIJ1L, String DNIJ2L, String DNIJ1V, String DNIJ2V, String DNIArb
+	void AniadirPartido(String DNIJ1L, String DNIJ2L, String DNIJ1V, String DNIJ2V, String DNIArb
 		, Date fecha, int numPista, int codEd)
 	{
 		try
@@ -104,17 +104,17 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.toString());
+			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	public void EliminarColaborador(String CIF, int codEd)
+	void EliminarColaborador(String CIF, int codEd)
 	{
 
 	}
 
 
-	public void FinalizarConexion()
+	void FinalizarConexion()
 	{
 		try
 		{
@@ -127,7 +127,7 @@ public class SistemaTorneo
 		}
 		catch (SQLException e)
 		{
-			//MostrarError(e.toString()); Hello
+			ConsoleError.MostrarError(e.toString());
 		}
 
 		System.out.println(ConsoleColors.PURPLE + "<> Finalizando Sistema <>" + ConsoleColors.RESET);
