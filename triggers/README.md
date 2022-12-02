@@ -1,0 +1,1 @@
+# Aquí van los disparadores de la base de datos

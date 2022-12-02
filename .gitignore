@@ -6,9 +6,6 @@ out/
 src/Secret/*
 !src/Secret/README.md
 
-triggers/
-
-
 # Compiled class file
 *.class
 
