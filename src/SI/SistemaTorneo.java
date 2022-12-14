@@ -9,7 +9,8 @@ import Secret.SecretDB;
 public class SistemaTorneo
 {
 	private Connection con;
-	private boolean noTableCreation = true;
+	private boolean tableCreation = true;
+	private boolean tableFill = true;
 
 
 	public SistemaTorneo()
@@ -43,12 +44,13 @@ public class SistemaTorneo
 		// Iniciar las tablas
 		CrearTablas();
 
+		// Rellenado por defecto
 		PreRellenarTablas();
 	}
 
 	private void CrearTablas()
 	{
-		if (noTableCreation)
+		if (!tableCreation)
 			return;
 
 		try
@@ -263,7 +265,58 @@ public class SistemaTorneo
 
 	private void PreRellenarTablas()
 	{
+		if (!tableFill)
+			return;
 
+		try
+		{
+			// EDICIONES
+
+			//JUGADOR
+
+			//PAREJA
+
+			//PARTICIPA
+
+			//ENTRENADOR
+
+			//PAREJA_ENTRENADA
+
+			//ESPECTADOR
+
+			//COMPRA_REALIZA_ENEDICION
+
+			//COMPRAFINALIZADA
+
+			// COMPRAPAGADA
+
+			// ENTRADA_EMITIDAEN
+
+			// TIENEENTRADAS
+
+			// ARBITRO
+
+			// OFERTAS_RECIBE_HECHA
+
+			// CONTRAOFERTAS
+
+			// TIENE
+
+			// PISTAS
+
+			// PARTIDOS_L_V_TA_TP
+
+			// EMPRESA
+
+			// PATROCINA_COLABORA
+
+
+			throw new SQLException("ESTO NO ESTA HECHO");
+		}
+		catch (SQLException e)
+		{
+			ConsoleError.MostrarError(e.toString());
+		}
 	}
 
 	private boolean ExisteTabla(String nombreTabla)
