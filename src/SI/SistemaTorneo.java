@@ -9,7 +9,7 @@ import Secret.SecretDB;
 public class SistemaTorneo
 {
 	private Connection con;
-
+	private boolean noTableCreation = true;
 
 
 	public SistemaTorneo()
@@ -43,11 +43,14 @@ public class SistemaTorneo
 		// Iniciar las tablas
 		CrearTablas();
 
-		RellenarTablasPrueba();
+		PreRellenarTablas();
 	}
 
 	private void CrearTablas()
 	{
+		if (noTableCreation)
+			return;
+
 		try
 		{
 
@@ -128,7 +131,7 @@ public class SistemaTorneo
 					"CorreoElectronico VARCHAR(80) CONSTRAINT USEDMAIL UNIQUE CONSTRAINT NOMAIL NOT NULL ," +
 					"Contrasenia VARCHAR(30) CONSTRAINT NOPASSWD NOT NULL," +
 					"CONSTRAINT DNI_ESP_FORMATO CHECK(REGEXP_LIKE(DNI, '^[0-9][0-9]{7}[A-Z]$'))," +
-					"CONSTRAINT EMAIL_ESP_FORMATO CHECK(REGEXP_LIKE(CorreoElectronico, '^[a-zA-Z]+[a-zA-Z0-9.]@{1}+[a-zA-Z0-9]\\.[a-zA-Z]{2,4}$'))" +
+					"CONSTRAINT EMAIL_ESP_FORMATO CHECK(REGEXP_LIKE(CorreoElectronico, '^[a-zA-Z][a-zA-Z0-9\\.]*@[a-zA-Z0-9]+\\.[a-zA-Z]{2,4}$'))" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.COMPRA_REALIZA_ENEDICION_UWU + "( " +
@@ -237,8 +240,8 @@ public class SistemaTorneo
 					"Email VARCHAR(80)," +
 					"Telefono VARCHAR(15)," +
 					"CONSTRAINT CIF_EMP_FORMATO CHECK(REGEXP_LIKE(CIF, '^[A-Z][0-9]{7}[A-Z0-9]$'))," +
-					"CONSTRAINT EMAIL_EMP_FORMATO CHECK(REGEXP_LIKE(Email, '^[a-zA-Z]+[a-zA-Z0-9.]@{1}+[a-zA-Z0-9]\\.[a-zA-Z]{2,4}$'))," +
-					"CONSTRAINT TELEF_EMP_FORMATO CHECK(REGEXP_LIKE(Telefono, '?\\+[0-9]{10}[0-9]$'))" +
+					"CONSTRAINT EMAIL_EMP_FORMATO CHECK(REGEXP_LIKE(Email, '^[a-zA-Z][a-zA-Z0-9\\.]*@[a-zA-Z0-9]+\\.[a-zA-Z]{2,4}$'))," +
+					"CONSTRAINT TELEF_EMP_FORMATO CHECK(REGEXP_LIKE(Telefono, '^\\+?[0-9]{10}[0-9]$'))" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.PATROCINA_COLABORA_UWU + "( " +
@@ -258,9 +261,74 @@ public class SistemaTorneo
 		}
 	}
 
-	private void RellenarTablasPrueba()
+	private void PreRellenarTablas()
 	{
 
+	}
+
+	private boolean ExisteTabla(String nombreTabla)
+	{
+		boolean existe = false;
+
+		try
+		{
+			DatabaseMetaData dbmd = con.getMetaData();
+			existe = dbmd.getTables(null, null, nombreTabla.toUpperCase(), new String[] {"TABLE"}).next();
+		}
+		catch (SQLException e)
+		{
+			ConsoleError.MostrarError(e.toString());
+		}
+
+		return existe;
+	}
+
+	void MostrarTabla(String nombreTabla)
+	{
+		try
+		{
+			Statement stm = con.createStatement();
+			ResultSet rs = stm.executeQuery("SELECT * FROM " + nombreTabla);
+			ResultSetMetaData rsmd = rs.getMetaData();
+
+			int numCols = rsmd.getColumnCount();
+
+			int numEspacios = numCols*22;
+
+			System.out.print(ConsoleColors.GREEN);
+			// Cabecera
+			System.out.println("<" + "-".repeat(numEspacios/2) + " " + nombreTabla + " " + "-".repeat(numEspacios/2) + ">");
+
+			// Columnas de los atributos
+			for (int i = 1; i <= numCols; i++)
+			{
+				System.out.format("%-24s", rsmd.getColumnName(i));
+			}
+
+			System.out.println();
+
+			// Valores de las columnas
+			while (rs.next())
+			{
+				for (int i = 1; i <= numCols; i++)
+				{
+					System.out.format("%-24s", "  " + rs.getString(i));
+				}
+
+				System.out.println();
+			}
+
+			// Parte inferior
+			numEspacios += nombreTabla.length() + 2;
+
+			System.out.println("<" + "-".repeat(numEspacios) + ">");
+			System.out.print(ConsoleColors.RESET);
+			System.out.println();
+		}
+		catch (SQLException e)
+		{
+			System.out.println(e.toString());
+		}
 	}
 
 	////////////////////////////////////////////////////////
@@ -349,23 +417,6 @@ public class SistemaTorneo
 
 		System.out.println(ConsoleColors.PURPLE + "<> Finalizando Sistema <>" + ConsoleColors.RESET);
 		con = null;
-	}
-
-	private boolean ExisteTabla(String nombreTabla)
-	{
-		boolean existe = false;
-
-		try
-		{
-			DatabaseMetaData dbmd = con.getMetaData();
-			existe = dbmd.getTables(null, null, nombreTabla.toUpperCase(), new String[] {"TABLE"}).next();
-		}
-		catch (SQLException e)
-		{
-			ConsoleError.MostrarError(e.toString());
-		}
-
-		return existe;
 	}
 
 	public MenuSistema MenuSistema()
