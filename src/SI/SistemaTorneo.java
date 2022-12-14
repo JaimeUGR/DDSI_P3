@@ -79,7 +79,8 @@ public class SistemaTorneo
 					"Fecha DATE," +
 					"Nombre VARCHAR(50)," +
 					"Apellidos VARCHAR(100)," +
-					"Sexo VARCHAR(15) CONSTRAINT NOSEX NOT NULL CONSTRAINT BADSEX CHECK(Sexo='M' OR Sexo='F')" +
+					"Sexo VARCHAR(15) CONSTRAINT NOSEX NOT NULL CONSTRAINT BADSEX CHECK(Sexo='M' OR Sexo='F')," +
+					"CONSTRAINT DNI_JUG_FORMATO CHECK(REGEXP_LIKE(DNI, '^[0-9][0-9]{7}[A-Z]$'))" +
 					")");
 
 			// Comprobar que no se repite cambiar pdf TODO
@@ -104,7 +105,8 @@ public class SistemaTorneo
 					"Fecha DATE," +
 					"Nombre VARCHAR(50)," +
 					"Apellidos VARCHAR(100)," +
-					"Sexo VARCHAR(15) CONSTRAINT NOSEX_ENTRENADOR NOT NULL CONSTRAINT BADSEX_ENTRENADOR CHECK(Sexo='M' OR Sexo='F')" +
+					"Sexo VARCHAR(15) CONSTRAINT NOSEX_ENTRENADOR NOT NULL CONSTRAINT BADSEX_ENTRENADOR CHECK(Sexo='M' OR Sexo='F')," +
+					"CONSTRAINT DNI_ENT_FORMATO CHECK(REGEXP_LIKE(DNI, '^[0-9][0-9]{7}[A-Z]$'))" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.PAREJA_ENTRENADA_UWU + "( " +
@@ -124,7 +126,9 @@ public class SistemaTorneo
 					"Nombre VARCHAR(50)," +
 					"Apellidos VARCHAR(100)," +
 					"CorreoElectronico VARCHAR(80) CONSTRAINT USEDMAIL UNIQUE CONSTRAINT NOMAIL NOT NULL ," +
-					"Contrasenia VARCHAR(30) CONSTRAINT NOPASSWD NOT NULL" +
+					"Contrasenia VARCHAR(30) CONSTRAINT NOPASSWD NOT NULL," +
+					"CONSTRAINT DNI_ESP_FORMATO CHECK(REGEXP_LIKE(DNI, '^[0-9][0-9]{7}[A-Z]$'))," +
+					"CONSTRAINT EMAIL_ESP_FORMATO CHECK(REGEXP_LIKE(CorreoElectronico, '^[a-zA-Z]+[a-zA-Z0-9.]@{1}+[a-zA-Z0-9]\\.[a-zA-Z]{2,4}$'))" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.COMPRA_REALIZA_ENEDICION_UWU + "( " +
@@ -175,7 +179,8 @@ public class SistemaTorneo
 					"Nombre VARCHAR(50)," +
 					"Apellidos VARCHAR(100)," +
 					"FechaNac DATE," +
-					"Sexo VARCHAR(15) CONSTRAINT NOSEX_ARBITRO NOT NULL CONSTRAINT BADSEX_ARBITRO CHECK(Sexo='M' OR Sexo='F')" +
+					"Sexo VARCHAR(15) CONSTRAINT NOSEX_ARBITRO NOT NULL CONSTRAINT BADSEX_ARBITRO CHECK(Sexo='M' OR Sexo='F')," +
+					"CONSTRAINT DNI_ARB_FORMATO CHECK(REGEXP_LIKE(DNI, '^[0-9][0-9]{7}[A-Z]$'))" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.OFERTAS_RECIBE_HECHA_UWU + "( " +
@@ -230,13 +235,16 @@ public class SistemaTorneo
 					"Nombre VARCHAR(50)," +
 					"PersonaContacto VARCHAR(100)," +
 					"Email VARCHAR(80)," +
-					"Telefono VARCHAR(15)" +
+					"Telefono VARCHAR(15)," +
+					"CONSTRAINT CIF_EMP_FORMATO CHECK(REGEXP_LIKE(CIF, '^[A-Z][0-9]{7}[A-Z0-9]$'))," +
+					"CONSTRAINT EMAIL_EMP_FORMATO CHECK(REGEXP_LIKE(Email, '^[a-zA-Z]+[a-zA-Z0-9.]@{1}+[a-zA-Z0-9]\\.[a-zA-Z]{2,4}$'))," +
+					"CONSTRAINT TELEF_EMP_FORMATO CHECK(REGEXP_LIKE(Telefono, '?\\+[0-9]{10}[0-9]$'))" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.PATROCINA_COLABORA_UWU + "( " +
 					"CIF CONSTRAINT PATROCINA_FK_EMPRESA REFERENCES " + Tablas.EMPRESA_UWU + "(CIF), " +
 					"CodEdicion CONSTRAINT PATROCINA_FK_EDICIONES REFERENCES " + Tablas.EDICIONES_UWU + "(CodEdicion)," +
-					"EsPatrocinador NUMBER(1) CONSTRAINT BADESPATROCINADOR CHECK (EsPAtrocinador IN (0,1))," +
+					"EsPatrocinador NUMBER(1) CONSTRAINT BADESPATROCINADOR CHECK (EsPatrocinador IN (0,1))," +
 					"Dinero NUMBER(9,2) CONSTRAINT BADMONEY CHECK (Dinero>=0)," +
 					"PRIMARY KEY (CIF,CodEdicion)" +
 					")");
