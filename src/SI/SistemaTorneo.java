@@ -1,10 +1,12 @@
 package SI;
 
 import java.sql.*;
+import java.text.SimpleDateFormat;
 
 import ConsoleColors.ConsoleColors;
 import ConsoleErrors.ConsoleError;
 import Secret.SecretDB;
+import oracle.jdbc.OracleTypes;
 
 public class SistemaTorneo
 {
@@ -258,7 +260,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			System.out.println(e.getCause());
+			System.out.println(e.getCause().toString());
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -268,52 +270,471 @@ public class SistemaTorneo
 		if (!tableFill)
 			return;
 
+		SimpleDateFormat dateFormatBasic = new SimpleDateFormat("dd/MM/yyyy");
+		SimpleDateFormat dateFormatExtended = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
 		try
 		{
+			PreparedStatement pstm;
+			String query;
+
 			// EDICIONES
+			query = "INSERT INTO " + Tablas.EDICIONES_UWU.toString() + " VALUES(?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, oracle.jdbc.OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, oracle.jdbc.OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2022").getTime()));
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//JUGADOR
+			query = "INSERT INTO " + Tablas.JUGADOR_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "11111111A");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Paco");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "M");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111B");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Manuela");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111C");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Luis");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "M");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111D");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Ivan");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111E");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Angel");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111F");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Giouseppe");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "M");
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//PAREJA
+			query = "INSERT INTO " + Tablas.PAREJA_UWU.toString() + " VALUES(?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "11111111A");
+			pstm.setString(2, "11111111B");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111C");
+			pstm.setString(2, "11111111D");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111E");
+			pstm.setString(2, "11111111F");
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//PARTICIPA
+			query = "INSERT INTO " + Tablas.PARTICIPA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "11111111A");
+			pstm.setString(2, "11111111B");
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.setObject(4, 0, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111C");
+			pstm.setString(2, "11111111D");
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.setObject(4, 0, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111E");
+			pstm.setString(2, "11111111F");
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.setObject(4, 0, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//ENTRENADOR
+			query = "INSERT INTO " + Tablas.ENTRENADOR_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "22222222A");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Manue");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "M");
+			pstm.addBatch();
+
+			pstm.setString(1, "22222222B");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "Ana");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//PAREJA_ENTRENADA
+			query = "INSERT INTO " + Tablas.PAREJA_ENTRENADA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "11111111A");
+			pstm.setString(2, "11111111B");
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.setString(4, "22222222A");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111C");
+			pstm.setString(2, "11111111D");
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.setString(4, "22222222B");
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//ESPECTADOR
+			query = "INSERT INTO " + Tablas.ESPECTADOR_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "44444444A");
+			pstm.setString(2, "Franchesco");
+			pstm.setString(3, "Virgolinni");
+			pstm.setString(4, "esp1@ugr.es");
+			pstm.setString(5, "1234");
+			pstm.addBatch();
+
+			pstm.setString(1, "44444444B");
+			pstm.setString(2, "Fran");
+			pstm.setString(3, "Virgolinni");
+			pstm.setString(4, "esp2@ugr.es");
+			pstm.setString(5, "1234");
+			pstm.addBatch();
+
+			pstm.setString(1, "44444444C");
+			pstm.setString(2, "Alverto");
+			pstm.setString(3, "Virgolinni");
+			pstm.setString(4, "esp3@ugr.es");
+			pstm.setString(5, "1234");
+			pstm.addBatch();
+
+			pstm.setString(1, "44444444D");
+			pstm.setString(2, "Jose");
+			pstm.setString(3, "Virgolinni");
+			pstm.setString(4, "esp4@ugr.es");
+			pstm.setString(5, "1234");
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//COMPRA_REALIZA_ENEDICION
+			query = "INSERT INTO " + Tablas.COMPRA_REALIZA_ENEDICION_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
+			pstm.setString(3, "44444444A");
+			pstm.setObject(4, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
+			pstm.setString(3, "44444444B");
+			pstm.setObject(4, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 3, OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
+			pstm.setString(3, "44444444C");
+			pstm.setObject(4, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			//COMPRAFINALIZADA
+			query = "INSERT INTO " + Tablas.COMPRAFINALIZADA_UWU.toString() + " VALUES(?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setDate(3, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setObject(2, 2, OracleTypes.NUMBER);
+			pstm.setDate(3, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// COMPRAPAGADA
+			query = "INSERT INTO " + Tablas.COMPRAPAGADA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// ENTRADA_EMITIDAEN
+			query = "INSERT INTO " + Tablas.ENTRADA_EMITIDAEN_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setString(2, "Grada_1");
+			pstm.setObject(3, 3.5, OracleTypes.NUMBER);
+			pstm.setObject(4, 25, OracleTypes.NUMBER);
+			pstm.setObject(5, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setString(2, "Grada_2");
+			pstm.setObject(3, 3.5, OracleTypes.NUMBER);
+			pstm.setObject(4, 25, OracleTypes.NUMBER);
+			pstm.setObject(5, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// TIENEENTRADAS
+			query = "INSERT INTO " + Tablas.TIENEENTRADAS_UWU.toString() + " VALUES(?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(3, 5, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 2, OracleTypes.NUMBER);
+			pstm.setObject(3, 5, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 3, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(3, 4, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// ARBITRO
+			query = "INSERT INTO " + Tablas.ARBITRO_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "33333333A");
+			pstm.setString(2, "Charles");
+			pstm.setString(3, "Mein");
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("15/12/2002").getTime()));
+			pstm.setString(5, "M");
+			pstm.addBatch();
+
+			pstm.setString(1, "33333333B");
+			pstm.setString(2, "Julia");
+			pstm.setString(3, "Mein");
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("15/12/2002").getTime()));
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
+			pstm.setString(1, "33333333C");
+			pstm.setString(2, "Paz");
+			pstm.setString(3, "Mein");
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("15/12/2002").getTime()));
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// OFERTAS_RECIBE_HECHA
+			query = "INSERT INTO " + Tablas.OFERTAS_RECIBE_HECHA_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 500, OracleTypes.NUMBER);
+			pstm.setString(3, "ACEPTADA");
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("10/12/2021").getTime()));
+			pstm.setDate(5, new java.sql.Date(dateFormatBasic.parse("12/12/2021").getTime()));
+			pstm.setString(6, "33333333A");
+			pstm.setObject(7, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setObject(2, 250, OracleTypes.NUMBER);
+			pstm.setString(3, "PENDIENTE");
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("10/12/2021").getTime()));
+			pstm.setNull(5, OracleTypes.NULL);
+			pstm.setString(6, "33333333B");
+			pstm.setObject(7, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 3, OracleTypes.NUMBER);
+			pstm.setObject(2, 250, OracleTypes.NUMBER);
+			pstm.setString(3, "RECHAZADA");
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("10/12/2021").getTime()));
+			pstm.setDate(5, new java.sql.Date(dateFormatBasic.parse("12/12/2021").getTime()));
+			pstm.setString(6, "33333333C");
+			pstm.setObject(7, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// CONTRAOFERTAS
+			query = "INSERT INTO " + Tablas.CONTRAOFERTAS_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 350, OracleTypes.NUMBER);
+			pstm.setString(3, "ACEPTADA");
+			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("12/12/2021").getTime()));
+			pstm.setDate(5, new java.sql.Date(dateFormatBasic.parse("14/12/2021").getTime()));
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// TIENE
+			query = "INSERT INTO " + Tablas.TIENE_UWU.toString() + " VALUES(?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 3, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// PISTAS
+			query = "INSERT INTO " + Tablas.PISTAS_UWU.toString() + " VALUES(?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setString(2, "Pista_1");
+			pstm.setObject(3, 50, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setString(2, "Pista_2");
+			pstm.setObject(3, 60, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// PARTIDOS_L_V_TA_TP
+			query = "INSERT INTO " + Tablas.PARTIDOS_L_V_TA_TP_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(dateFormatExtended.parse("20/12/2021 10:30:00").getTime()));
+			pstm.setString(3, "11111111A");
+			pstm.setString(4, "11111111B");
+			pstm.setObject(5, 1, OracleTypes.NUMBER);
+			pstm.setString(6, "11111111C");
+			pstm.setString(7, "11111111D");
+			pstm.setObject(8, 1, OracleTypes.NUMBER);
+			pstm.setString(9, "33333333A");
+			pstm.setObject(10, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(dateFormatExtended.parse("20/12/2021 15:00:00").getTime()));
+			pstm.setString(3, "11111111C");
+			pstm.setString(4, "11111111D");
+			pstm.setObject(5, 1, OracleTypes.NUMBER);
+			pstm.setString(6, "11111111E");
+			pstm.setString(7, "11111111F");
+			pstm.setObject(8, 1, OracleTypes.NUMBER);
+			pstm.setString(9, "33333333C");
+			pstm.setObject(10, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// EMPRESA
+			query = "INSERT INTO " + Tablas.EMPRESA_UWU.toString() + " VALUES(?, ?, ?, ? ,?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setString(1, "A1111111A");
+			pstm.setString(2, "Gulugulu");
+			pstm.setString(3, "Paco");
+			pstm.setString(4, "emp1@ugr.es");
+			pstm.setString(5, "+34111111111");
+			pstm.addBatch();
+
+			pstm.setString(1, "B1111111A");
+			pstm.setString(2, "Facebuk");
+			pstm.setString(3, "Jeff");
+			pstm.setString(4, "emp2@ugr.es");
+			pstm.setString(5, "34111111112");
+			pstm.addBatch();
+
+			pstm.setString(1, "C1111111A");
+			pstm.setString(2, "Aguazon");
+			pstm.setString(3, "Martin");
+			pstm.setString(4, "emp3@ugr.es");
+			pstm.setString(5, "+34111111113");
+			pstm.addBatch();
+
+			pstm.executeBatch();
 
 			// PATROCINA_COLABORA
+			query = "INSERT INTO " + Tablas.PATROCINA_COLABORA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
 
+			pstm.setString(1, "A1111111A");
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(3, 0, OracleTypes.NUMBER);
+			pstm.setObject(4, 500, OracleTypes.NUMBER);
+			pstm.addBatch();
 
-			throw new SQLException("ESTO NO ESTA HECHO");
+			pstm.setString(1, "A1111111A");
+			pstm.setObject(2, 2, OracleTypes.NUMBER);
+			pstm.setObject(3, 0, OracleTypes.NUMBER);
+			pstm.setObject(4, 1500, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setString(1, "B1111111A");
+			pstm.setObject(2, 2, OracleTypes.NUMBER);
+			pstm.setObject(3, 1, OracleTypes.NUMBER);
+			pstm.setObject(4, 100, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.executeBatch();
+
+			con.commit();
 		}
-		catch (SQLException e)
+		catch (Exception e)
 		{
 			ConsoleError.MostrarError(e.toString());
 		}
