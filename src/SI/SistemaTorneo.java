@@ -193,7 +193,7 @@ public class SistemaTorneo
 			stm.executeUpdate("CREATE TABLE " + Tablas.OFERTAS_RECIBE_HECHA_UWU + "( " +
 					"CodOferta NUMBER(6) CONSTRAINT OFERTAPK PRIMARY KEY, " +
 					"CantidadDinero NUMBER(9,2)," +
-					"EstadoOferta VARCHAR(20)," +
+					"EstadoOferta VARCHAR(20) CHECK(EstadoOferta IN (ACEPTADA, RECHAZADA))," +
 					"FechaOferta DATE," +
 					"FechaAcep_Rech DATE," +
 					"DNIArb REFERENCES " + Tablas.ARBITRO_UWU + "(DNI)," +
@@ -203,7 +203,7 @@ public class SistemaTorneo
 			stm.executeUpdate("CREATE TABLE " + Tablas.CONTRAOFERTAS_UWU + "( " +
 					"CodContraoferta NUMBER(6) CONSTRAINT CONTRAOFERTASPK PRIMARY KEY, " +
 					"CantidadDinero NUMBER(9,2)," +
-					"EstadoContraoferta VARCHAR(20)," +
+					"EstadoContraoferta VARCHAR(20) CHECK(EstadoContraoferta IN (ACEPTADA, RECHAZADA))," +
 					"FechaContraoferta DATE," +
 					"FechaAcep_Rech DATE" +
 					")");
