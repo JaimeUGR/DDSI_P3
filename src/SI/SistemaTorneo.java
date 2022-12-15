@@ -94,7 +94,7 @@ public class SistemaTorneo
 			stm.executeUpdate("CREATE TABLE " + Tablas.PAREJA_UWU + "( " +
 					"DNI_J1 CONSTRAINT PAREJA_FK_JUGADOR1 REFERENCES " + Tablas.JUGADOR_UWU + "(DNI)," +
 					"DNI_J2 CONSTRAINT PAREJA_FK_JUGADOR2 REFERENCES " + Tablas.JUGADOR_UWU + "(DNI)," +
-					"PRIMARY KEY(DNI_J1,DNI_J2)" +
+					"CONSTRAINT PAREJA_PK PRIMARY KEY(DNI_J1,DNI_J2)" +
 					")");
 
 			// Puntuacion no se comprueba rs TODO
@@ -104,7 +104,7 @@ public class SistemaTorneo
 					"CodEdicion CONSTRAINT PARTICIPA_FK_EDICIONES REFERENCES " + Tablas.EDICIONES_UWU +  "(CodEdicion), " +
 					"Puntuacion NUMBER(5) DEFAULT 0 CONSTRAINT BADSCORE CHECK(Puntuacion>=0)," +
 					"CONSTRAINT PARTICIPA_FK_PAREJA FOREIGN KEY (DNI_J1,DNI_J2) REFERENCES " + Tablas.PAREJA_UWU + "(DNI_J1, DNI_J2)," +
-					"PRIMARY KEY(DNI_J1,DNI_J2,CodEdicion)" +
+					"CONSTRAINT PARTICIPA_PK PRIMARY KEY(DNI_J1,DNI_J2,CodEdicion)" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.ENTRENADOR_UWU + "( " +
@@ -122,7 +122,7 @@ public class SistemaTorneo
 					"CodEdicion NUMBER(4), " +
 					"DNI_E CONSTRAINT PAREJA_ENTRENADA_FK_ENTRENADOR REFERENCES " + Tablas.ENTRENADOR_UWU + "(DNI)," +
 					"CONSTRAINT PAREJA_ENTRENADA_FK_PARTICIPA FOREIGN KEY (DNI_J1,DNI_J2,CodEdicion) REFERENCES " + Tablas.PARTICIPA_UWU + "(DNI_J1,DNI_J2,CodEdicion)," +
-					"PRIMARY KEY(DNI_J1,DNI_J2,CodEdicion)" +
+					"CONSTRAINT PAREJA_ENTRANADA_PK PRIMARY KEY(DNI_J1,DNI_J2,CodEdicion)" +
 					")");
 
 
@@ -158,8 +158,8 @@ public class SistemaTorneo
 					"CodCompraPagada NUMBER(9) NOT NULL, " +
 					"FechaPagos DATE," +
 					"CONSTRAINT COMPRA_PAGADA_UNIQUE UNIQUE (CodCompra, CodCompraFinalizada, CodCompraPagada), " +
-					"FOREIGN KEY (CodCompra,CodCompraFinalizada) REFERENCES " + Tablas.COMPRAFINALIZADA_UWU + "(CodCompra,CodCompraFinalizada)," +
-					"PRIMARY KEY (CodCompra,CodCompraFinalizada)" +
+					"CONSTRAINT COMPRAPAGADA_COMPRAFINALIZADA_FK FOREIGN KEY (CodCompra,CodCompraFinalizada) REFERENCES " + Tablas.COMPRAFINALIZADA_UWU + "(CodCompra,CodCompraFinalizada)," +
+					"CONSTRAINT COMPRAPAGADA_PK PRIMARY KEY (CodCompra,CodCompraFinalizada)" +
 					")");
 
 
@@ -176,7 +176,7 @@ public class SistemaTorneo
 					"CodCompra CONSTRAINT TIENEENTRADAS_FK_COMPRA REFERENCES " + Tablas.COMPRA_REALIZA_ENEDICION_UWU + "(CodCompra)," +
 					"CodEntrada CONSTRAINT TIENEENTRADAS_FK_ENTRADA REFERENCES " + Tablas.ENTRADA_EMITIDAEN_UWU + "(CodEntrada)," +
 					"Cantidad NUMBER(4) CONSTRAINT BADQUANTITY CHECK(Cantidad>=0)," +
-					"PRIMARY KEY (CodCompra,CodEntrada)" +
+					"CONSTRAINT TIENEENTRADAS_PK PRIMARY KEY (CodCompra,CodEntrada)" +
 					")");
 
 
@@ -196,8 +196,8 @@ public class SistemaTorneo
 					"EstadoOferta VARCHAR(20)," +
 					"FechaOferta DATE," +
 					"FechaAcep_Rech DATE," +
-					"DNIArb REFERENCES " + Tablas.ARBITRO_UWU + "(DNI)," +
-					"CodEdicion REFERENCES " + Tablas.EDICIONES_UWU + "(CodEdicion)" +
+					"DNIArb CONSTRAINT OFERTAS_ARBITRO_FK REFERENCES " + Tablas.ARBITRO_UWU + "(DNI)," +
+					"CodEdicion CONSTRAINT OFERTAS_EDICIONES_FK REFERENCES " + Tablas.EDICIONES_UWU + "(CodEdicion)" +
 					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.CONTRAOFERTAS_UWU + "( " +
@@ -210,7 +210,7 @@ public class SistemaTorneo
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.TIENE_UWU + "( " +
 					"CodOferta CONSTRAINT TIENE_FK_OFERTA REFERENCES " + Tablas.OFERTAS_RECIBE_HECHA_UWU + "(CodOferta) CONSTRAINT TIENE_PK PRIMARY KEY, " +
-					"CodContraoferta CONSTRAINT TIENE_FK_CONTRAOFERTA REFERENCES " + Tablas.CONTRAOFERTAS_UWU + "(CodContraoferta) UNIQUE NOT NULL" +
+					"CodContraoferta CONSTRAINT TIENE_FK_CONTRAOFERTA REFERENCES " + Tablas.CONTRAOFERTAS_UWU + "(CodContraoferta) CONSTRAINT UNIQUE_CONTRAOFERTA UNIQUE CONSTRAINT NOTNULL_CONTRAOFERTA NOT NULL" +
 					")");
 
 			// Pistas
