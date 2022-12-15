@@ -12,4 +12,3 @@ BEGIN
         raise_application_error(-20510, :old.CIF || ' no se puede eliminar un colaborador si el torneo ya ha empezado');
     END IF;
 END;
-/
