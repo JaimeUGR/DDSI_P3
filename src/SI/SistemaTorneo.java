@@ -837,7 +837,10 @@ public class SistemaTorneo
 	{
 		try
 		{
+			Statement stm = con.createStatement();
 
+			stm.executeUpdate("INSERT INTO " + Tablas.OFERTAS_RECIBE_HECHA_UWU +
+							  " VALUES(12, 2599, PENDIENTE, CURRENT_DATE(), , 33333333A, 1);");
 		}
 		catch (Exception e)
 		{
