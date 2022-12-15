@@ -3,6 +3,7 @@ package SI;
 import ConsoleColors.ConsoleColors;
 import ConsoleErrors.ConsoleError;
 
+import java.io.Console;
 import java.util.Scanner;
 import java.text.SimpleDateFormat;
 
@@ -82,22 +83,52 @@ public class MenuSistema
 	/**************** Métodos Principales *****************/
 	////////////////////////////////////////////////////////
 
+	private void MostrarTabla()
+	{
+		Tablas[] tablas = Tablas.values();
+		int tablaSeleccionada;
+
+		System.out.print(ConsoleColors.GREEN_BOLD_BRIGHT + "Lista de tablas:" + ConsoleColors.GREEN_BRIGHT);
+
+		for (int i = 0; i < tablas.length; i++)
+		{
+			if (i % 4 == 0)
+			{
+				System.out.println();
+				System.out.print("\t");
+			}
+
+			System.out.format("%-35s", "[" + Integer.toString(i) + "] " + tablas[i].toString());
+		}
+
+		System.out.println();
+		System.out.println();
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Tabla A Mostrar >> ");
+		tablaSeleccionada = LeerEntero();
+		System.out.println(ConsoleColors.RESET);
+
+		if (tablaSeleccionada < 0 || tablaSeleccionada >= tablas.length)
+			return;
+
+		st.MostrarTabla(tablas[tablaSeleccionada].toString());
+	}
+
 	private void AsignarParejaEntrenador()
 	{
 		String DNIJ1, DNIJ2, DNIEnt;
 		int codEd;
 
 		// Leer los datos
-		System.out.print("DNI Jugador 1 >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Jugador 1 >> " + ConsoleColors.RESET);
 		DNIJ1 = LeerCadena();
 
-		System.out.print("DNI Jugador 2 >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Jugador 2 >> " + ConsoleColors.RESET);
 		DNIJ2 = LeerCadena();
 
-		System.out.print("DNI Entrenador >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Entrenador >> " + ConsoleColors.RESET);
 		DNIEnt = LeerCadena();
 
-		System.out.print("Código Edición >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Edición >> " + ConsoleColors.RESET);
 		codEd = LeerEntero();
 
 		// Hacer la llamada
@@ -109,7 +140,7 @@ public class MenuSistema
 		int codCompraFinalizada;
 
 		// Leer los datos
-		System.out.print("Código Compra Finalizada >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Compra Finalizada >> " + ConsoleColors.RESET);
 		codCompraFinalizada = LeerEntero();
 
 		// Hacer la llamada
@@ -123,13 +154,13 @@ public class MenuSistema
 		float dineroOfrecido;
 
 		// Leer los datos
-		System.out.print("DNI Árbitro >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Árbitro >> " + ConsoleColors.RESET);
 		DNIArb = LeerCadena();
 
-		System.out.print("Código Edición >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Edición >> " + ConsoleColors.RESET);
 		codEd = LeerEntero();
 
-		System.out.print("Dinero Ofrecido >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Dinero Ofrecido >> " + ConsoleColors.RESET);
 		dineroOfrecido = LeerDecimal();
 
 		// Hacer la llamada
@@ -143,28 +174,28 @@ public class MenuSistema
 		int numPista, codEd;
 
 		// Leer los datos
-		System.out.print("DNI Jugador 1 Local >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Jugador 1 Local >> " + ConsoleColors.RESET);
 		DNIJ1L = LeerCadena();
 
-		System.out.print("DNI Jugador 2 Local >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Jugador 2 Local >> " + ConsoleColors.RESET);
 		DNIJ2L = LeerCadena();
 
-		System.out.print("DNI Jugador 1 Visitante >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Jugador 1 Visitante >> " + ConsoleColors.RESET);
 		DNIJ1V = LeerCadena();
 
-		System.out.print("DNI Jugador 2 Visitante >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Jugador 2 Visitante >> " + ConsoleColors.RESET);
 		DNIJ2V = LeerCadena();
 
-		System.out.print("DNI Árbitro >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Árbitro >> " + ConsoleColors.RESET);
 		DNIArb = LeerCadena();
 
-		System.out.print("Fecha (dd/MM/yyyy HH:mm:ss) >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Fecha (dd/MM/yyyy HH:mm:ss) >> " + ConsoleColors.RESET);
 		fecha = new java.sql.Date(LeerFecha().getTime());
 
-		System.out.print("Número de Pista >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Número de Pista >> " + ConsoleColors.RESET);
 		numPista = LeerEntero();
 
-		System.out.print("Código Edición >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Edición >> " + ConsoleColors.RESET);
 		codEd = LeerEntero();
 
 		// Hacer la llamada
@@ -177,10 +208,10 @@ public class MenuSistema
 		int codEd;
 
 		// Leer los datos
-		System.out.print("CIF >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "CIF >> " + ConsoleColors.RESET);
 		CIF = LeerCadena();
 
-		System.out.print("Código Edición >> ");
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Edición >> " + ConsoleColors.RESET);
 		codEd = LeerEntero();
 
 		// Hacer la llamada
@@ -221,6 +252,7 @@ public class MenuSistema
 			{
 				case 1:
 				{
+					MostrarTabla();
 					break;
 				}
 				case 2:
