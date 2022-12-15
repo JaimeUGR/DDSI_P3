@@ -9,7 +9,7 @@ BEGIN
         SELECT COUNT(*) INTO cuantos FROM PAREJA_ENTRENADA_UWU WHERE CodEdicion = registro_parejas.CodEdicion, DNI_J1 = registro_parejas.DNI_J1, DNI_J2 = registro_parejas.DNI_J2;
         IF (cuantos > 0) THEN
             /* ¿Qué hacer cuando se encuentra que ya hay un entrenador asignado a la pareja? */
-
+            raise_application_error(-20500, ' La pareja ya tiene un entrenador ');
         END IF;
     END LOOP;
 
