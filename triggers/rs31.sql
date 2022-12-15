@@ -5,13 +5,13 @@
 
 -- Este trigger permite comprobar si un arbitro ya ha aceptado una oferta o no
 -- En caso que si haya aceptado se permite realizar oferta, en otro caso, no
--- Para realizar esto, se cuenta cuantas ofertas aceptadas tiene el arbitro, si supera 0, ha aceptado
+-- Para realizar esto se cuenta cuantas ofertas aceptadas tiene el arbitro, si supera 0, ha aceptado algo
 
 CREATE OR REPLACE TRIGGER YA_ACEPTO_OFERTA
 	BEFORE
 	INSERT ON OFERTAS_RECIBE_HECHA_UWU
 DECLARE
-	dni CHAR(9);
+	dni CHAR(9); -- Sospecho que hay que borrar esta variable y cambiarlo todo por new:DNIArb
 	aceptadas INT;
 BEGIN
 	-- TODO Importante, revisar como se llama la variable de entrada del dni del arbitro
