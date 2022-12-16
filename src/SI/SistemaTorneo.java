@@ -259,6 +259,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			Rollback();
 			System.out.println(e.getCause().toString());
 			ConsoleError.MostrarError(e.toString());
 		}
@@ -749,6 +750,19 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			Rollback();
+			ConsoleError.MostrarError(e.toString());
+		}
+	}
+
+	private void Rollback()
+	{
+		try
+		{
+			con.rollback();
+		}
+		catch (SQLException e)
+		{
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -830,6 +844,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -842,6 +857,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -854,6 +870,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -863,24 +880,52 @@ public class SistemaTorneo
 	{
 		try
 		{
+			// PARTIDOS_L_V_TA_TP
+			String query = "INSERT INTO " + Tablas.PARTIDOS_L_V_TA_TP_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement pstm = con.prepareStatement(query);
 
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(fecha.getTime()));
+			pstm.setString(3, DNIJ1L);
+			pstm.setString(4, DNIJ2L);
+			pstm.setObject(5, codEd, OracleTypes.NUMBER);
+			pstm.setString(6, DNIJ1V);
+			pstm.setString(7, DNIJ2V);
+			pstm.setObject(8, codEd, OracleTypes.NUMBER);
+			pstm.setString(9, DNIArb);
+			pstm.setObject(10, numPista, OracleTypes.NUMBER);
+			pstm.executeUpdate();
+
+			con.commit();
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
 	void EliminarColaborador(String CIF, int codEd)
 	{
-		try {
-			Statement stm = con.createStatement();
+		try
+		{
+			String query = "DELETE FROM " + Tablas.PATROCINA_COLABORA_UWU + " WHERE CIF=? AND CodEdicion=? AND EsPatrocinador=?";
+			PreparedStatement pstm = con.prepareStatement(query);
+
+			pstm.setString(1, CIF);
+			pstm.setObject(2, codEd, OracleTypes.NUMBER);
+			pstm.setObject(3, 0, OracleTypes.NUMBER); // 0 Colaborador, 1 Patrocinador
+
+			pstm.executeUpdate();
+
+			/*Statement stm = con.createStatement();
 
 			stm.executeUpdate("DELETE FROM " + Tablas.PATROCINA_COLABORA_UWU +
-					" WHERE CIF=" + CIF + " AND CodEdicion=" + codEd + " AND EsPatrocinador=1;");
+					" WHERE CIF=" + CIF + " AND CodEdicion=" + codEd + " AND EsPatrocinador=1");*/
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -893,7 +938,7 @@ public class SistemaTorneo
 			if (con != null)
 			{
 				System.out.println(ConsoleColors.CYAN + "Terminando conexión con BD" + ConsoleColors.RESET);
-				con.rollback(); // Las transacciones en curso / cambios no guardados no se mantienen
+				con.rollback(); // Cambios no guardados no se mantienen
 				con.close();
 			}
 		}
