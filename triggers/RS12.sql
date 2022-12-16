@@ -1,21 +1,108 @@
-CREATE OR REPLACE PROCEDURE RS12 AS
-	CURSOR parejasAsignadas IS SELECT * FROM PAREJA_ENTRENADA_UWU;
-    registro_parejas parejasAsignadas%ROWTYPE;
-    cuantos INTEGER;
+CREATE OR REPLACE TRIGGER rs12
+-- FOR INSERT OR UPDATE [OF column] ON PARTICIPA
+FOR INSERT OR UPDATE [OF column] ON PARTICIPA
+COMPOUND TRIGGER
+   -- Declarative Section (optional)
+    CURSOR cursor_puntuacion IS SELECT Puntuacion FROM PARTICIPA_UWU;
+    registro_puntuacion cursor_puntuacion%ROWTYPE;
+   -- Variables declared here have firing-statement duration.
+    hay_igual INTEGER;
+     --Executed before DML statement
+     BEFORE STATEMENT IS
+BEGIN
+    FOR registro_puntuacion IN puntuacion LOOP
+        SELECT Puntuacion FROM PARTICIPA_UWU WHERE CodEdicion = registro_parejas.CodEdicion;
+        IF (puntuacion <> 0 and Puntuacion = puntuacion) THEN
+            raise_application_error(-20500, ' La puntuación está repetida ');
+        END IF;
+    END LOOP;
+END BEFORE STATEMENT;
+
+     --Executed before each row change- :NEW, :OLD are available
+     BEFORE EACH ROW IS
+BEGIN
+NULL;
+END BEFORE EACH ROW;
+
+END compound_trigger_name;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE OR REPLACE TRIGGER puntuacion
+	BEFORE
+	INSERT ON PARTICIPA_UWU
+	FOR EACH ROW
+DECLARE
+    punt INTEGER;
+BEGIN
+    SELECT COUNT(*) INTO punt FROM PARTICIPA_UWU WHERE Puntuacion = :NEW.Puntuacion AND CodEdicion = :NEW.CodEdicion;
+    IF (:NEW.Puntuacion <> 0 and punt > 0) THEN
+            raise_application_error(-20500, ' La puntuación está repetida ');
+    END IF;
+END;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+CREATE OR REPLACE TRIGGER RS12
+
+	CURSOR puntuacion IS SELECT * FROM PARTICIPA_UWU WHERE;
+    registro_puntuacion puntuacion%ROWTYPE;
 
 BEGIN
-    FOR registro_parejas IN parejasAsignadas LOOP
-        /* Tengo que ver si en una edición esa pareja ya tiene entrenador */
-        SELECT COUNT(*) INTO cuantos FROM PAREJA_ENTRENADA_UWU WHERE CodEdicion = registro_parejas.CodEdicion, DNI_J1 = registro_parejas.DNI_J1, DNI_J2 = registro_parejas.DNI_J2;
-        IF (cuantos > 0) THEN
-            /* ¿Qué hacer cuando se encuentra que ya hay un entrenador asignado a la pareja? */
-            raise_application_error(-20500, ' La pareja ya tiene un entrenador ');
+    FOR registro_puntuacion IN puntuacion LOOP
+        SELECT Puntuacion FROM PARTICIPA_UWU WHERE CodEdicion = registro_parejas.CodEdicion;
+        IF (puntuacion <> 0 and Puntuacion = puntuacion) THEN
+            raise_application_error(-20500, ' La puntuación está repetida ');
         END IF;
     END LOOP;
 
 EXCEPTION
 	WHEN OTHERS THEN
-		IF (parejasAsignadas%ISOPEN) THEN
-			CLOSE parejasAsignadas;
+		IF (puntuacion%ISOPEN) THEN
+			CLOSE puntuacion;
         END IF;
 END;
