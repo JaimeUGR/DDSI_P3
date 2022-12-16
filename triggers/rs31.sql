@@ -10,14 +10,15 @@
 CREATE OR REPLACE TRIGGER YA_ACEPTO_OFERTA
 	BEFORE
 	INSERT ON OFERTAS_RECIBE_HECHA_UWU
+	FOR EACH ROW
 DECLARE
-	aceptadas INT;
+	aceptadas INTEGER;
 BEGIN
 	SELECT count(*) INTO aceptadas FROM OFERTAS_RECIBE_HECHA_UWU
-	WHERE DNIArb = :new.DNIArb AND EstadoOferta = "ACEPTADA" AND CodEdicion = :new.CodEdicion;
+	WHERE DNIArb = :new.DNIArb AND EstadoOferta = 'ACEPTADA' AND CodEdicion = :new.CodEdicion;
 	IF (aceptadas > 0) THEN
 		-- NOTE Nota para el futuro, sumar strings parece ser con || en PLSQL
-		raise_application_error(-20520, "Error al realizar oferta, el arbitro con DNI " || :new.DNIArb ||
-										" ya ha aceptado una en la edicion " || :new.CodEdicion);
+		raise_application_error(-20520, 'Error al realizar oferta, el arbitro con DNI ' || :new.DNIArb ||
+										' ya ha aceptado una en la edicion ' || :new.CodEdicion);
 	END IF;
 END;
