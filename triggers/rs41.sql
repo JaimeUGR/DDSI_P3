@@ -1,3 +1,10 @@
+-- PARA PROBARLO
+-- ALTER SESSION SET NLS_DATE_FORMAT = 'DD/MM/YYYY HH24:MI:SS';
+-- select * from partidos_l_v_ta_tp_uwu;
+-- set serveroutput on;
+-- UPDATE partidos_l_v_ta_tp_uwu set Fecha = to_date('20/12/2021 19:31:00', 'DD/MM/YYYY HH24:MI:SS') where CodP = 3;
+-- INSERT INTO partidos_l_v_ta_tp_uwu values(4, to_date('20/12/2021 22:30:00', 'DD/MM/YYYY HH24:MI:SS'),'11111111A', '11111111B', 1, '11111111C', '11111111D', 1, '33333333A', 2);
+
 create or replace TRIGGER fechaPartido
     FOR INSERT OR UPDATE ON PARTIDOS_L_V_TA_TP_UWU
     COMPOUND TRIGGER
@@ -40,11 +47,3 @@ create or replace TRIGGER fechaPartido
         END LOOP;
     END BEFORE EACH ROW;
 END fechaPartido;
-
--- PARA PROBARLO
--- ALTER SESSION SET NLS_DATE_FORMAT = 'DD/MM/YYYY HH24:MI:SS';
--- select * from partidos_l_v_ta_tp_uwu;
--- set serveroutput on;
--- UPDATE partidos_l_v_ta_tp_uwu set Fecha = to_date('20/12/2021 19:31:00', 'DD/MM/YYYY HH24:MI:SS') where CodP = 3;
--- INSERT INTO partidos_l_v_ta_tp_uwu values(4, to_date('20/12/2021 22:30:00', 'DD/MM/YYYY HH24:MI:SS'),'11111111A', '11111111B', 1, '11111111C', '11111111D', 1, '33333333A', 2);
-

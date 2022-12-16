@@ -1,5 +1,7 @@
 package SI;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
@@ -48,6 +50,9 @@ public class SistemaTorneo
 
 		// Rellenado por defecto
 		PreRellenarTablas();
+
+		// Cargar los triggers
+		CargarTriggers();
 	}
 
 	private void CrearTablas()
@@ -755,6 +760,37 @@ public class SistemaTorneo
 		}
 	}
 
+	private void CargarTriggers()
+	{
+		try
+		{
+			String basePath = System.getProperty("user.dir") + "/triggers/", query;
+			Statement stm = con.createStatement();
+
+			//
+
+			//
+
+			// RS3.1
+			query = Files.readString(Path.of(basePath + "rs31.sql"));
+			stm.executeUpdate(query);
+
+			// RS4.1
+			query = Files.readString(Path.of(basePath + "rs41.sql"));
+			stm.executeUpdate(query);
+
+			// RS5.2
+			query = Files.readString(Path.of(basePath + "rs52.sql"));
+			stm.executeUpdate(query);
+
+			con.commit();
+		}
+		catch (Exception e)
+		{
+			ConsoleError.MostrarError(e.toString());
+		}
+	}
+
 	private void Rollback()
 	{
 		try
@@ -840,7 +876,7 @@ public class SistemaTorneo
 	{
 		try
 		{
-
+			con.commit();
 		}
 		catch (Exception e)
 		{
@@ -853,7 +889,7 @@ public class SistemaTorneo
 	{
 		try
 		{
-
+			con.commit();
 		}
 		catch (Exception e)
 		{
@@ -862,14 +898,24 @@ public class SistemaTorneo
 		}
 	}
 
-	void HacerOfertaArbitro(String DNIArb, int codEd, float dineroOfrecido)
+	void HacerOfertaArbitro(int codOferta, String DNIArb, int codEd, float dineroOfrecido)
 	{
 		try
 		{
-			Statement stm = con.createStatement();
+			String query = "INSERT INTO " + Tablas.OFERTAS_RECIBE_HECHA_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement pstm = con.prepareStatement(query);
 
-			stm.executeUpdate("INSERT INTO " + Tablas.OFERTAS_RECIBE_HECHA_UWU +
-							  " VALUES(12, 2599, PENDIENTE, CURRENT_DATE(), , 33333333A, 1);");
+			pstm.setObject(1, codOferta, OracleTypes.NUMBER);
+			pstm.setObject(2, dineroOfrecido, OracleTypes.NUMBER);
+			pstm.setString(3, "PENDIENTE");
+			pstm.setDate(4, new java.sql.Date(new java.util.Date(System.currentTimeMillis()).getTime()));
+			pstm.setNull(5, OracleTypes.NULL);
+			pstm.setString(6, DNIArb);
+			pstm.setObject(7, codEd, OracleTypes.NUMBER);
+
+			pstm.executeUpdate();
+
+			con.commit();
 		}
 		catch (Exception e)
 		{
@@ -878,16 +924,15 @@ public class SistemaTorneo
 		}
 	}
 
-	void AniadirPartido(String DNIJ1L, String DNIJ2L, String DNIJ1V, String DNIJ2V, String DNIArb
+	void AniadirPartido(int codP, String DNIJ1L, String DNIJ2L, String DNIJ1V, String DNIJ2V, String DNIArb
 		, Date fecha, int numPista, int codEd)
 	{
 		try
 		{
-			// PARTIDOS_L_V_TA_TP
 			String query = "INSERT INTO " + Tablas.PARTIDOS_L_V_TA_TP_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			PreparedStatement pstm = con.prepareStatement(query);
 
-			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(1, codP, OracleTypes.NUMBER);
 			pstm.setDate(2, new java.sql.Date(fecha.getTime()));
 			pstm.setString(3, DNIJ1L);
 			pstm.setString(4, DNIJ2L);
@@ -908,23 +953,18 @@ public class SistemaTorneo
 		}
 	}
 
-	void EliminarColaborador(String CIF, int codEd)
+	void EliminarColaboradorPatrocinador(String CIF, int codEd)
 	{
 		try
 		{
-			String query = "DELETE FROM " + Tablas.PATROCINA_COLABORA_UWU + " WHERE CIF=? AND CodEdicion=? AND EsPatrocinador=?";
+			String query = "DELETE FROM " + Tablas.PATROCINA_COLABORA_UWU + " WHERE CIF=? AND CodEdicion=?";
 			PreparedStatement pstm = con.prepareStatement(query);
 
 			pstm.setString(1, CIF);
 			pstm.setObject(2, codEd, OracleTypes.NUMBER);
-			pstm.setObject(3, 0, OracleTypes.NUMBER); // 0 Colaborador, 1 Patrocinador
-
 			pstm.executeUpdate();
 
-			/*Statement stm = con.createStatement();
-
-			stm.executeUpdate("DELETE FROM " + Tablas.PATROCINA_COLABORA_UWU +
-					" WHERE CIF=" + CIF + " AND CodEdicion=" + codEd + " AND EsPatrocinador=1");*/
+			con.commit();
 		}
 		catch (Exception e)
 		{

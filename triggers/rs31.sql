@@ -1,8 +1,4 @@
-/*
-    Practica 3 - DDSI - 22/23
-    Trigger correspondiente al requisito funcional 3.2 y requisito semantico 3.1
-*/
-
+--Trigger correspondiente al requisito funcional 3.2 y requisito semantico 3.1
 -- Este trigger permite comprobar si un arbitro ya ha aceptado una oferta o no
 -- En caso que si haya aceptado se permite realizar oferta, en otro caso, no
 -- Para realizar esto se cuenta cuantas ofertas aceptadas tiene el arbitro, si supera 0, ha aceptado algo
