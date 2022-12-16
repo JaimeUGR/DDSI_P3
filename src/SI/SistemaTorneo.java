@@ -337,6 +337,20 @@ public class SistemaTorneo
 			pstm.setString(5, "M");
 			pstm.addBatch();
 
+			pstm.setString(1, "11111111G");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "HLIB_1");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111H");
+			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2020").getTime()));
+			pstm.setString(3, "HLIB_2");
+			pstm.setString(4, "Reyna");
+			pstm.setString(5, "F");
+			pstm.addBatch();
+
 			pstm.executeBatch();
 
 			//PAREJA
