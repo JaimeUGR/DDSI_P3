@@ -5,6 +5,7 @@ out/
 .attach_pid*
 src/Secret/*
 !src/Secret/README.md
+triggers/ejemplos
 
 # Compiled class file
 *.class
