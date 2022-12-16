@@ -191,7 +191,7 @@ public class SistemaTorneo
 			stm.executeUpdate("CREATE TABLE " + Tablas.OFERTAS_RECIBE_HECHA_UWU + "( " +
 					"CodOferta NUMBER(6) CONSTRAINT OFERTAPK PRIMARY KEY, " +
 					"CantidadDinero NUMBER(9,2)," +
-					"EstadoOferta VARCHAR(20) CHECK(EstadoOferta IN (ACEPTADA, RECHAZADA, PENDIENTE))," +
+					"EstadoOferta VARCHAR(20) DEFAULT 'PENDIENTE' CHECK(EstadoOferta IN ('ACEPTADA', 'RECHAZADA', 'PENDIENTE'))," +
 					"FechaOferta DATE," +
 					"FechaAcep_Rech DATE," +
 					"DNIArb CONSTRAINT NN_OFERTAS_ARB NOT NULL CONSTRAINT OFERTAS_ARBITRO_FK REFERENCES " + Tablas.ARBITRO_UWU + "(DNI)," +
@@ -201,7 +201,7 @@ public class SistemaTorneo
 			stm.executeUpdate("CREATE TABLE " + Tablas.CONTRAOFERTAS_UWU + "( " +
 					"CodContraoferta NUMBER(6) CONSTRAINT CONTRAOFERTASPK PRIMARY KEY, " +
 					"CantidadDinero NUMBER(9,2)," +
-					"EstadoContraoferta VARCHAR(20) CHECK(EstadoContraoferta IN (ACEPTADA, RECHAZADA, PENDIENTE))," +
+					"EstadoContraoferta VARCHAR(20) DEFAULT 'PENDIENTE' CHECK(EstadoContraoferta IN ('ACEPTADA', 'RECHAZADA', 'PENDIENTE'))," +
 					"FechaContraoferta DATE," +
 					"FechaAcep_Rech DATE" +
 					")");
