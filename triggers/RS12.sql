@@ -1,108 +1,33 @@
 CREATE OR REPLACE TRIGGER rs12
--- FOR INSERT OR UPDATE [OF column] ON PARTICIPA
-FOR INSERT OR UPDATE [OF column] ON PARTICIPA
+FOR INSERT OR UPDATE OF Puntuacion ON PARTICIPA_UWU
 COMPOUND TRIGGER
+
    -- Declarative Section (optional)
+    TYPE Puntuaciones IS RECORD(Puntuacion Number(4));
+    TYPE Lista IS TABLE OF Puntuaciones;
+    -- Variables declared here have firing-statement duration.
+    listaPuntuaciones Lista := Lista();
     CURSOR cursor_puntuacion IS SELECT Puntuacion FROM PARTICIPA_UWU;
-    registro_puntuacion cursor_puntuacion%ROWTYPE;
-   -- Variables declared here have firing-statement duration.
-    hay_igual INTEGER;
+    registroPuntuacion cursor_puntuacion%ROWTYPE;
+
      --Executed before DML statement
-     BEFORE STATEMENT IS
-BEGIN
-    FOR registro_puntuacion IN puntuacion LOOP
-        SELECT Puntuacion FROM PARTICIPA_UWU WHERE CodEdicion = registro_parejas.CodEdicion;
-        IF (puntuacion <> 0 and Puntuacion = puntuacion) THEN
-            raise_application_error(-20500, ' La puntuación está repetida ');
-        END IF;
-    END LOOP;
-END BEFORE STATEMENT;
+    BEFORE STATEMENT IS
+    BEGIN
+        FOR registroPuntuacion IN cursor_puntuacion LOOP
+            listaPuntuaciones.extend();
+            listaPuntuaciones(listaPuntuaciones.LAST).Puntuacion:= registroPuntuacion.Puntuacion;
+        END LOOP;
+    END BEFORE STATEMENT;
 
      --Executed before each row change- :NEW, :OLD are available
-     BEFORE EACH ROW IS
-BEGIN
-NULL;
-END BEFORE EACH ROW;
+    BEFORE EACH ROW IS
+    BEGIN
+        FOR i IN listaPuntuaciones.FIRST .. listaPuntuaciones.LAST LOOP
+                IF (:NEW.Puntuacion <> 0 and :NEW.Puntuacion = listaPuntuaciones(i).Puntuacion) THEN
+                        raise_application_error(-20500, ' La puntuación está repetida ');
+                END IF;
+        END LOOP;
+    NULL;
+    END BEFORE EACH ROW;
 
-END compound_trigger_name;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-CREATE OR REPLACE TRIGGER puntuacion
-	BEFORE
-	INSERT ON PARTICIPA_UWU
-	FOR EACH ROW
-DECLARE
-    punt INTEGER;
-BEGIN
-    SELECT COUNT(*) INTO punt FROM PARTICIPA_UWU WHERE Puntuacion = :NEW.Puntuacion AND CodEdicion = :NEW.CodEdicion;
-    IF (:NEW.Puntuacion <> 0 and punt > 0) THEN
-            raise_application_error(-20500, ' La puntuación está repetida ');
-    END IF;
-END;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-CREATE OR REPLACE TRIGGER RS12
-
-	CURSOR puntuacion IS SELECT * FROM PARTICIPA_UWU WHERE;
-    registro_puntuacion puntuacion%ROWTYPE;
-
-BEGIN
-    FOR registro_puntuacion IN puntuacion LOOP
-        SELECT Puntuacion FROM PARTICIPA_UWU WHERE CodEdicion = registro_parejas.CodEdicion;
-        IF (puntuacion <> 0 and Puntuacion = puntuacion) THEN
-            raise_application_error(-20500, ' La puntuación está repetida ');
-        END IF;
-    END LOOP;
-
-EXCEPTION
-	WHEN OTHERS THEN
-		IF (puntuacion%ISOPEN) THEN
-			CLOSE puntuacion;
-        END IF;
-END;
+END rs12;
