@@ -836,9 +836,11 @@ public class SistemaTorneo
 			pstm.setObject(4, DNIEnt, OracleTypes.VARCHAR);
 			pstm.execute();
 
+			con.commit();
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}

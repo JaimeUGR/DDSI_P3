@@ -150,10 +150,13 @@ public class MenuSistema
 	private void HacerOfertaArbitro()
 	{
 		String DNIArb;
-		int codEd;
+		int codOferta, codEd;
 		float dineroOfrecido;
 
 		// Leer los datos
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Oferta >> " + ConsoleColors.RESET);
+		codOferta = LeerEntero();
+
 		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Árbitro >> " + ConsoleColors.RESET);
 		DNIArb = LeerCadena();
 
@@ -164,16 +167,19 @@ public class MenuSistema
 		dineroOfrecido = LeerDecimal();
 
 		// Hacer la llamada
-		st.HacerOfertaArbitro(DNIArb, codEd, dineroOfrecido);
+		st.HacerOfertaArbitro(codOferta, DNIArb, codEd, dineroOfrecido);
 	}
 
 	private void AniadirPartido()
 	{
 		String DNIJ1L, DNIJ2L, DNIJ1V, DNIJ2V, DNIArb;
 		java.sql.Date fecha;
-		int numPista, codEd;
+		int codP, numPista, codEd;
 
 		// Leer los datos
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Codigo Partido >> " + ConsoleColors.RESET);
+		codP = LeerEntero();
+
 		System.out.print(ConsoleColors.YELLOW_BOLD + "DNI Jugador 1 Local >> " + ConsoleColors.RESET);
 		DNIJ1L = LeerCadena();
 
@@ -199,7 +205,7 @@ public class MenuSistema
 		codEd = LeerEntero();
 
 		// Hacer la llamada
-		st.AniadirPartido(DNIJ1L, DNIJ2L, DNIJ1V, DNIJ2V, DNIArb, fecha, numPista, codEd);
+		st.AniadirPartido(codP, DNIJ1L, DNIJ2L, DNIJ1V, DNIJ2V, DNIArb, fecha, numPista, codEd);
 	}
 
 	private void EliminarColaborador()
@@ -215,7 +221,7 @@ public class MenuSistema
 		codEd = LeerEntero();
 
 		// Hacer la llamada
-		st.EliminarColaborador(CIF, codEd);
+		st.EliminarColaboradorPatrocinador(CIF, codEd);
 	}
 
 

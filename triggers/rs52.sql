@@ -1,14 +1,14 @@
-CREATE OR REPLACE TRIGGER eliminarColaborador
+CREATE OR REPLACE TRIGGER eliminarColab_Patro
     BEFORE
-        DELETE ON PATROCINA_COLABORA_UWU
+    DELETE ON PATROCINA_COLABORA_UWU
     FOR EACH ROW
 DECLARE
-    fechainicioe DATE;
-    fechaactual DATE;
+    fechaInicioEd DATE;
+    fechaActual DATE;
 BEGIN
-    fechaactual := CURRENT_DATE();
-    SELECT FechaInicio INTO fechainicioe FROM EDICIONES_UWU WHERE CodEdicion=:old.CodEdicion;
-    IF fechainicioe < fechaactual THEN
-        raise_application_error(-20510, :old.CIF || ' no se puede eliminar un colaborador si el torneo ya ha empezado');
+    fechaActual := CURRENT_DATE();
+    SELECT FechaInicio INTO fechaInicioEd FROM EDICIONES_UWU WHERE CodEdicion=:old.CodEdicion;
+    IF fechaInicioEd < fechaActual THEN
+        raise_application_error(-20510, :old.CIF || ' no se puede eliminar un colaborador si la edición ya ha empezado');
     END IF;
 END;
