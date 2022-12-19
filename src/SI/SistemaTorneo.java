@@ -876,6 +876,16 @@ public class SistemaTorneo
 	{
 		try
 		{
+			//System.out.println("Insertando tuplas en " + Tablas.PAREJA_ENTRENADA);
+			String query = "INSERT INTO " + Tablas.PAREJA_ENTRENADA_UWU + "(DNI_J1, DNI_J2, CodEdicion, DNI_E) VALUES(?, ?, ?, ?)";
+			PreparedStatement pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, DNIJ1, OracleTypes.VARCHAR);
+			pstm.setObject(2, DNIJ2, OracleTypes.VARCHAR);
+			pstm.setObject(3, codEd, OracleTypes.NUMBER);
+			pstm.setObject(4, DNIEnt, OracleTypes.VARCHAR);
+			pstm.execute();
+
 			con.commit();
 		}
 		catch (Exception e)
