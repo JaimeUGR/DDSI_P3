@@ -1,5 +1,7 @@
 package SI;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 
@@ -48,6 +50,9 @@ public class SistemaTorneo
 
 		// Rellenado por defecto
 		PreRellenarTablas();
+
+		// Cargar los triggers
+		CargarTriggers();
 	}
 
 	private void CrearTablas()
@@ -191,7 +196,7 @@ public class SistemaTorneo
 			stm.executeUpdate("CREATE TABLE " + Tablas.OFERTAS_RECIBE_HECHA_UWU + "( " +
 					"CodOferta NUMBER(6) CONSTRAINT OFERTAPK PRIMARY KEY, " +
 					"CantidadDinero NUMBER(9,2)," +
-					"EstadoOferta VARCHAR(20)," +
+					"EstadoOferta VARCHAR(20) DEFAULT 'PENDIENTE' CHECK(EstadoOferta IN ('ACEPTADA', 'RECHAZADA', 'PENDIENTE'))," +
 					"FechaOferta DATE," +
 					"FechaAcep_Rech DATE," +
 					"DNIArb CONSTRAINT NN_OFERTAS_ARB NOT NULL CONSTRAINT OFERTAS_ARBITRO_FK REFERENCES " + Tablas.ARBITRO_UWU + "(DNI)," +
@@ -201,7 +206,7 @@ public class SistemaTorneo
 			stm.executeUpdate("CREATE TABLE " + Tablas.CONTRAOFERTAS_UWU + "( " +
 					"CodContraoferta NUMBER(6) CONSTRAINT CONTRAOFERTASPK PRIMARY KEY, " +
 					"CantidadDinero NUMBER(9,2)," +
-					"EstadoContraoferta VARCHAR(20)," +
+					"EstadoContraoferta VARCHAR(20) DEFAULT 'PENDIENTE' CHECK(EstadoContraoferta IN ('ACEPTADA', 'RECHAZADA', 'PENDIENTE'))," +
 					"FechaContraoferta DATE," +
 					"FechaAcep_Rech DATE" +
 					")");
@@ -259,6 +264,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			Rollback();
 			System.out.println(e.getCause().toString());
 			ConsoleError.MostrarError(e.toString());
 		}
@@ -749,6 +755,50 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			Rollback();
+			ConsoleError.MostrarError(e.toString());
+		}
+	}
+
+	private void CargarTriggers()
+	{
+		try
+		{
+			String basePath = System.getProperty("user.dir") + "/triggers/", query;
+			Statement stm = con.createStatement();
+
+			//
+
+			//
+
+			// RS3.1
+			query = Files.readString(Path.of(basePath + "rs31.sql"));
+			stm.executeUpdate(query);
+
+			// RS4.1
+			query = Files.readString(Path.of(basePath + "rs41.sql"));
+			stm.executeUpdate(query);
+
+			// RS5.2
+			query = Files.readString(Path.of(basePath + "rs52.sql"));
+			stm.executeUpdate(query);
+
+			con.commit();
+		}
+		catch (Exception e)
+		{
+			ConsoleError.MostrarError(e.toString());
+		}
+	}
+
+	private void Rollback()
+	{
+		try
+		{
+			con.rollback();
+		}
+		catch (SQLException e)
+		{
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -826,16 +876,6 @@ public class SistemaTorneo
 	{
 		try
 		{
-			//System.out.println("Insertando tuplas en " + Tablas.PAREJA_ENTRENADA);
-			String query = "INSERT INTO " + Tablas.PAREJA_ENTRENADA_UWU + "(DNI_J1, DNI_J2, CodEdicion, DNI_E) VALUES(?, ?, ?, ?)";
-			PreparedStatement pstm = con.prepareStatement(query);
-
-			pstm.setObject(1, DNIJ1, OracleTypes.VARCHAR);
-			pstm.setObject(2, DNIJ2, OracleTypes.VARCHAR);
-			pstm.setObject(3, codEd, OracleTypes.NUMBER);
-			pstm.setObject(4, DNIEnt, OracleTypes.VARCHAR);
-			pstm.execute();
-
 			con.commit();
 		}
 		catch (Exception e)
@@ -849,49 +889,86 @@ public class SistemaTorneo
 	{
 		try
 		{
-
+			con.commit();
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	void HacerOfertaArbitro(String DNIArb, int codEd, float dineroOfrecido)
+	void HacerOfertaArbitro(int codOferta, String DNIArb, int codEd, float dineroOfrecido)
 	{
 		try
 		{
+			String query = "INSERT INTO " + Tablas.OFERTAS_RECIBE_HECHA_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement pstm = con.prepareStatement(query);
 
+			pstm.setObject(1, codOferta, OracleTypes.NUMBER);
+			pstm.setObject(2, dineroOfrecido, OracleTypes.NUMBER);
+			pstm.setString(3, "PENDIENTE");
+			pstm.setDate(4, new java.sql.Date(new java.util.Date(System.currentTimeMillis()).getTime()));
+			pstm.setNull(5, OracleTypes.NULL);
+			pstm.setString(6, DNIArb);
+			pstm.setObject(7, codEd, OracleTypes.NUMBER);
+
+			pstm.executeUpdate();
+
+			con.commit();
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	void AniadirPartido(String DNIJ1L, String DNIJ2L, String DNIJ1V, String DNIJ2V, String DNIArb
+	void AniadirPartido(int codP, String DNIJ1L, String DNIJ2L, String DNIJ1V, String DNIJ2V, String DNIArb
 		, Date fecha, int numPista, int codEd)
 	{
 		try
 		{
+			String query = "INSERT INTO " + Tablas.PARTIDOS_L_V_TA_TP_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			PreparedStatement pstm = con.prepareStatement(query);
 
+			pstm.setObject(1, codP, OracleTypes.NUMBER);
+			pstm.setDate(2, new java.sql.Date(fecha.getTime()));
+			pstm.setString(3, DNIJ1L);
+			pstm.setString(4, DNIJ2L);
+			pstm.setObject(5, codEd, OracleTypes.NUMBER);
+			pstm.setString(6, DNIJ1V);
+			pstm.setString(7, DNIJ2V);
+			pstm.setObject(8, codEd, OracleTypes.NUMBER);
+			pstm.setString(9, DNIArb);
+			pstm.setObject(10, numPista, OracleTypes.NUMBER);
+			pstm.executeUpdate();
+
+			con.commit();
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	void EliminarColaborador(String CIF, int codEd)
+	void EliminarColaboradorPatrocinador(String CIF, int codEd)
 	{
-		try {
-			Statement stm = con.createStatement();
+		try
+		{
+			String query = "DELETE FROM " + Tablas.PATROCINA_COLABORA_UWU + " WHERE CIF=? AND CodEdicion=?";
+			PreparedStatement pstm = con.prepareStatement(query);
 
-			stm.executeUpdate("DELETE FROM " + Tablas.PATROCINA_COLABORA_UWU +
-					" WHERE CIF=" + CIF + " AND CodEdicion=" + codEd + " AND EsPatrocinador=1;");
+			pstm.setString(1, CIF);
+			pstm.setObject(2, codEd, OracleTypes.NUMBER);
+			pstm.executeUpdate();
+
+			con.commit();
 		}
 		catch (Exception e)
 		{
+			//Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -904,7 +981,7 @@ public class SistemaTorneo
 			if (con != null)
 			{
 				System.out.println(ConsoleColors.CYAN + "Terminando conexión con BD" + ConsoleColors.RESET);
-				con.rollback(); // Las transacciones en curso / cambios no guardados no se mantienen
+				con.rollback(); // Cambios no guardados no se mantienen
 				con.close();
 			}
 		}
