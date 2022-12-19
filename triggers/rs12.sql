@@ -1,4 +1,4 @@
-CREATE OR REPLACE TRIGGER rs12
+CREATE OR REPLACE TRIGGER puntuacionParejas
 FOR INSERT OR UPDATE OF Puntuacion ON PARTICIPA_UWU
 COMPOUND TRIGGER
 
@@ -7,7 +7,7 @@ COMPOUND TRIGGER
     TYPE Lista IS TABLE OF Puntuaciones;
     -- Variables declared here have firing-statement duration.
     listaPuntuaciones Lista := Lista();
-    CURSOR cursor_puntuacion IS SELECT Puntuacion FROM PARTICIPA_UWU;
+    CURSOR cursor_puntuacion IS SELECT Puntuacion, CodEdicion FROM PARTICIPA_UWU;
     registroPuntuacion cursor_puntuacion%ROWTYPE;
 
      --Executed before DML statement
@@ -31,4 +31,4 @@ COMPOUND TRIGGER
     NULL;
     END BEFORE EACH ROW;
 
-END rs12;
+END puntuacionParejas;

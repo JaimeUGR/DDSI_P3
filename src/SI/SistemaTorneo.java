@@ -399,6 +399,18 @@ public class SistemaTorneo
 			pstm.setObject(4, 0, OracleTypes.NUMBER);
 			pstm.addBatch();
 
+			pstm.setString(1, "11111111A");
+			pstm.setString(2, "11111111B");
+			pstm.setObject(3, 2, OracleTypes.NUMBER);
+			pstm.setObject(4, 0, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setString(1, "11111111C");
+			pstm.setString(2, "11111111D");
+			pstm.setObject(3, 2, OracleTypes.NUMBER);
+			pstm.setObject(4, 0, OracleTypes.NUMBER);
+			pstm.addBatch();
+
 			pstm.executeBatch();
 
 			//ENTRENADOR
@@ -767,7 +779,9 @@ public class SistemaTorneo
 			String basePath = System.getProperty("user.dir") + "/triggers/", query;
 			Statement stm = con.createStatement();
 
-			//
+			// RS1.2
+			query = Files.readString(Path.of(basePath + "rs12.sql"));
+			stm.executeUpdate(query);
 
 			//
 
