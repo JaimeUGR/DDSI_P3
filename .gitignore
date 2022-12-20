@@ -6,6 +6,7 @@ out/
 src/Secret/*
 !src/Secret/README.md
 triggers/ejemplos
+*.pdf
 
 # Compiled class file
 *.class

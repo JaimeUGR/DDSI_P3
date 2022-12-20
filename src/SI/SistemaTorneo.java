@@ -828,6 +828,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
+			Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -917,7 +918,6 @@ public class SistemaTorneo
 	{
 		try
 		{
-			//System.out.println("Insertando tuplas en " + Tablas.PAREJA_ENTRENADA);
 			String query = "INSERT INTO " + Tablas.PAREJA_ENTRENADA_UWU + "(DNI_J1, DNI_J2, CodEdicion, DNI_E) VALUES(?, ?, ?, ?)";
 			PreparedStatement pstm = con.prepareStatement(query);
 
@@ -931,12 +931,12 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			//Rollback();
+			Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
 
-	void PagarCompra(int codCompraFinalizada)
+	void PagarCompra(int codCompraFinalizada, int codCompraPagada)
 	{
 		try
 		{
@@ -944,7 +944,7 @@ public class SistemaTorneo
 			PreparedStatement pstm;
 			ResultSet rs;
 
-			int codCompra, codCompraPagada = 5;
+			int codCompra;
 			float cantidadPagada;
 
 			// Obtener CodCompra
@@ -986,12 +986,12 @@ public class SistemaTorneo
 
 			// Mostrar el total pagado y el codCompra
 			System.out.println();
-			System.out.println(ConsoleColors.WHITE_BOLD + "CodCompra: " + Integer.toString(codCompra));
-			System.out.println("Total Pagado: " + Float.toString(cantidadPagada) + ConsoleColors.RESET);
+			System.out.println(ConsoleColors.WHITE_BOLD + "CodCompra: " + codCompra);
+			System.out.println("Total Pagado: " + cantidadPagada + ConsoleColors.RESET);
 		}
 		catch (Exception e)
 		{
-			//Rollback();
+			Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -1017,7 +1017,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			//Rollback();
+			Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -1046,7 +1046,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			//Rollback();
+			Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -1066,7 +1066,7 @@ public class SistemaTorneo
 		}
 		catch (Exception e)
 		{
-			//Rollback();
+			Rollback();
 			ConsoleError.MostrarError(e.toString());
 		}
 	}
@@ -1079,7 +1079,7 @@ public class SistemaTorneo
 			if (con != null)
 			{
 				System.out.println(ConsoleColors.CYAN + "Terminando conexión con BD" + ConsoleColors.RESET);
-				con.rollback(); // Cambios no guardados no se mantienen
+				con.rollback(); // Cambios no guardados no se mantienen (Recomendación de la documentación oficial)
 				con.close();
 			}
 		}

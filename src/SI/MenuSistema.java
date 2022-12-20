@@ -137,14 +137,17 @@ public class MenuSistema
 
 	private void PagarCompra()
 	{
-		int codCompraFinalizada;
+		int codCompraFinalizada, codCompraPagada;
 
 		// Leer los datos
 		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Compra Finalizada >> " + ConsoleColors.RESET);
 		codCompraFinalizada = LeerEntero();
 
+		System.out.print(ConsoleColors.YELLOW_BOLD + "Código Compra Pagada >> " + ConsoleColors.RESET);
+		codCompraPagada = LeerEntero();
+
 		// Hacer la llamada
-		st.PagarCompra(codCompraFinalizada);
+		st.PagarCompra(codCompraFinalizada, codCompraPagada);
 	}
 
 	private void HacerOfertaArbitro()
