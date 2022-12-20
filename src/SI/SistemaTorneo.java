@@ -913,7 +913,20 @@ public class SistemaTorneo
 	{
 		try
 		{
+			Statement stm = con.createStatement();
+			ResultSet rs = stm.executeQuery("SELECT SUM(PRECIO*CANTIDAD) FROM ENTRADA_EMITIDAEN_UWU, TIENEENTRADAS_UWU, COMPRAFINALIZADA_UWU WHERE entrada_emitidaen_uwu.codentrada=TIENEENTRADAS_UWU.CODENTRADA AND TIENEENTRADAS_UWU.CODCOMPRA=COMPRAFINALIZADA_UWU.CODCOMPRA AND COMPRAFINALIZADA_UWU.CODCOMPRA =" + codCompraFinalizada);
+			while(rs.next()){
+				System.out.println(rs.getFloat(1));
+			}
+			String query = "INSERT INTO " + Tablas.COMPRAPAGADA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			PreparedStatement pstm=con.prepareStatement(query);
+			pstm.setObject(1, codCompraFinalizada, OracleTypes.NUMBER);
+			pstm.setObject(2, codCompraFinalizada, OracleTypes.NUMBER);
+			pstm.setObject(3, codCompraFinalizada, OracleTypes.NUMBER);
+			pstm.setDate(4, new java.sql.Date(new java.util.Date(System.currentTimeMillis()).getTime()));
+			pstm.executeUpdate();
 			con.commit();
+
 		}
 		catch (Exception e)
 		{
