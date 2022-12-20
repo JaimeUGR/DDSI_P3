@@ -17,4 +17,4 @@ BEGIN
 		raise_application_error(-20520, 'Error al realizar oferta, el arbitro con DNI ' || :new.DNIArb ||
 										' ya ha aceptado una en la edicion ' || :new.CodEdicion);
 	END IF;
-END;
+END ofertaAceptada;

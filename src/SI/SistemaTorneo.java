@@ -66,6 +66,8 @@ public class SistemaTorneo
 			Statement stm = con.createStatement();
 			Tablas[] tablas = Tablas.values();
 
+			System.out.println(ConsoleColors.WHITE_BOLD);
+
 			for (int i = tablas.length-1; i>= 0; i--)
 			{
 				Tablas t = tablas[i];
@@ -76,6 +78,8 @@ public class SistemaTorneo
 					stm.executeUpdate("DROP TABLE " + t);
 				}
 			}
+
+			System.out.println(ConsoleColors.RESET);
 
 			// Ediciones
 			stm.executeUpdate("CREATE TABLE " + Tablas.EDICIONES_UWU + "( " +
@@ -165,19 +169,22 @@ public class SistemaTorneo
 					"CONSTRAINT COMPRAPAGADA_PK PRIMARY KEY (CodCompra,CodCompraFinalizada)" +
 					")");
 
-
-			stm.executeUpdate("CREATE TABLE " + Tablas.ENTRADA_EMITIDAEN_UWU + "( " +
+			stm.executeUpdate("CREATE TABLE " + Tablas.ENTRADA_UWU + "( " +
 					"CodEntrada NUMBER(2) PRIMARY KEY," +
-					"Tipo VARCHAR(50)," +
-					"Precio NUMBER(12,2) CONSTRAINT BADPRICE CHECK(Precio>=0), " +
-					"CantidadEmitida NUMBER(4) CONSTRAINT BADQUANTITY_ENTRADA CHECK(CantidadEmitida>=0)," +
-					"CodEdicion CONSTRAINT NN_ENTRADA_EDI NOT NULL CONSTRAINT ENTRADA_FK_EDICIONES REFERENCES " + Tablas.EDICIONES_UWU + "(CodEdicion)" +
+					"Tipo VARCHAR(50)" +
 					")");
 
+			stm.executeUpdate("CREATE TABLE " + Tablas.EMITIDAEN_UWU + "( " +
+					"CodEntrada NUMBER(2) CONSTRAINT EMITIDAEN_FK_ENTRADA REFERENCES " + Tablas.ENTRADA_UWU + "(CodEntrada)," +
+					"CodEdicion CONSTRAINT NN_ENTRADA_EDI NOT NULL CONSTRAINT EMITIDAEN_FK_EDICIONES REFERENCES " + Tablas.EDICIONES_UWU + "(CodEdicion)," +
+					"Precio NUMBER(12,2) CONSTRAINT BADPRICE CHECK(Precio>=0), " +
+					"CantidadEmitida NUMBER(4) CONSTRAINT BADQUANTITY_ENTRADA CHECK(CantidadEmitida>=0)," +
+					"CONSTRAINT EMITIDAEN_PK PRIMARY KEY (CodEntrada, CodEdicion)" +
+					")");
 
 			stm.executeUpdate("CREATE TABLE " + Tablas.TIENEENTRADAS_UWU + "( " +
 					"CodCompra CONSTRAINT TIENEENTRADAS_FK_COMPRA REFERENCES " + Tablas.COMPRA_REALIZA_ENEDICION_UWU + "(CodCompra)," +
-					"CodEntrada CONSTRAINT TIENEENTRADAS_FK_ENTRADA REFERENCES " + Tablas.ENTRADA_EMITIDAEN_UWU + "(CodEntrada)," +
+					"CodEntrada CONSTRAINT TIENEENTRADAS_FK_ENTRADA REFERENCES " + Tablas.ENTRADA_UWU + "(CodEntrada)," +
 					"Cantidad NUMBER(4) CONSTRAINT BADQUANTITY CHECK(Cantidad>=0)," +
 					"CONSTRAINT TIENEENTRADAS_PK PRIMARY KEY (CodCompra,CodEntrada)" +
 					")");
@@ -284,7 +291,7 @@ public class SistemaTorneo
 			String query;
 
 			// EDICIONES
-			query = "INSERT INTO " + Tablas.EDICIONES_UWU.toString() + " VALUES(?, ?)";
+			query = "INSERT INTO " + Tablas.EDICIONES_UWU + " VALUES(?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, oracle.jdbc.OracleTypes.NUMBER);
@@ -298,7 +305,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			//JUGADOR
-			query = "INSERT INTO " + Tablas.JUGADOR_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.JUGADOR_UWU + " VALUES(?, ?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "11111111A");
@@ -360,7 +367,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			//PAREJA
-			query = "INSERT INTO " + Tablas.PAREJA_UWU.toString() + " VALUES(?, ?)";
+			query = "INSERT INTO " + Tablas.PAREJA_UWU + " VALUES(?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "11111111A");
@@ -378,7 +385,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			//PARTICIPA
-			query = "INSERT INTO " + Tablas.PARTICIPA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.PARTICIPA_UWU + " VALUES(?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "11111111A");
@@ -414,7 +421,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			//ENTRENADOR
-			query = "INSERT INTO " + Tablas.ENTRENADOR_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.ENTRENADOR_UWU + " VALUES(?, ?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "22222222A");
@@ -434,7 +441,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			//PAREJA_ENTRENADA
-			query = "INSERT INTO " + Tablas.PAREJA_ENTRENADA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.PAREJA_ENTRENADA_UWU + " VALUES(?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "11111111A");
@@ -452,7 +459,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			//ESPECTADOR
-			query = "INSERT INTO " + Tablas.ESPECTADOR_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.ESPECTADOR_UWU + " VALUES(?, ?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "44444444A");
@@ -486,7 +493,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			//COMPRA_REALIZA_ENEDICION
-			query = "INSERT INTO " + Tablas.COMPRA_REALIZA_ENEDICION_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.COMPRA_REALIZA_ENEDICION_UWU + " VALUES(?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
@@ -504,13 +511,13 @@ public class SistemaTorneo
 			pstm.setObject(1, 3, OracleTypes.NUMBER);
 			pstm.setDate(2, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
 			pstm.setString(3, "44444444C");
-			pstm.setObject(4, 1, OracleTypes.NUMBER);
+			pstm.setObject(4, 2, OracleTypes.NUMBER);
 			pstm.addBatch();
 
 			pstm.executeBatch();
 
 			//COMPRAFINALIZADA
-			query = "INSERT INTO " + Tablas.COMPRAFINALIZADA_UWU.toString() + " VALUES(?, ?, ?)";
+			query = "INSERT INTO " + Tablas.COMPRAFINALIZADA_UWU + " VALUES(?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
@@ -526,39 +533,57 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// COMPRAPAGADA
-			query = "INSERT INTO " + Tablas.COMPRAPAGADA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.COMPRAPAGADA_UWU + " VALUES(?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
-			pstm.setObject(1, 1, OracleTypes.NUMBER);
-			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setObject(2, 2, OracleTypes.NUMBER);
 			pstm.setObject(3, 1, OracleTypes.NUMBER);
 			pstm.setDate(4, new java.sql.Date(dateFormatBasic.parse("15/12/2021").getTime()));
 			pstm.addBatch();
 
 			pstm.executeBatch();
 
-			// ENTRADA_EMITIDAEN
-			query = "INSERT INTO " + Tablas.ENTRADA_EMITIDAEN_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			// ENTRADA
+			query = "INSERT INTO " + Tablas.ENTRADA_UWU + " VALUES(?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
 			pstm.setString(2, "Grada_1");
-			pstm.setObject(3, 3.5, OracleTypes.NUMBER);
-			pstm.setObject(4, 25, OracleTypes.NUMBER);
-			pstm.setObject(5, 1, OracleTypes.NUMBER);
 			pstm.addBatch();
 
 			pstm.setObject(1, 2, OracleTypes.NUMBER);
 			pstm.setString(2, "Grada_2");
+			pstm.addBatch();
+
+			pstm.executeBatch();
+
+			// EMITIDAEN
+			query = "INSERT INTO " + Tablas.EMITIDAEN_UWU + " VALUES(?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
 			pstm.setObject(3, 3.5, OracleTypes.NUMBER);
 			pstm.setObject(4, 25, OracleTypes.NUMBER);
-			pstm.setObject(5, 1, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(3, 3.5, OracleTypes.NUMBER);
+			pstm.setObject(4, 25, OracleTypes.NUMBER);
+			pstm.addBatch();
+
+			pstm.setObject(1, 2, OracleTypes.NUMBER);
+			pstm.setObject(2, 2, OracleTypes.NUMBER);
+			pstm.setObject(3, 3.5, OracleTypes.NUMBER);
+			pstm.setObject(4, 25, OracleTypes.NUMBER);
 			pstm.addBatch();
 
 			pstm.executeBatch();
 
 			// TIENEENTRADAS
-			query = "INSERT INTO " + Tablas.TIENEENTRADAS_UWU.toString() + " VALUES(?, ?, ?)";
+			query = "INSERT INTO " + Tablas.TIENEENTRADAS_UWU + " VALUES(?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
@@ -577,14 +602,14 @@ public class SistemaTorneo
 			pstm.addBatch();
 
 			pstm.setObject(1, 3, OracleTypes.NUMBER);
-			pstm.setObject(2, 1, OracleTypes.NUMBER);
+			pstm.setObject(2, 2, OracleTypes.NUMBER);
 			pstm.setObject(3, 4, OracleTypes.NUMBER);
 			pstm.addBatch();
 
 			pstm.executeBatch();
 
 			// ARBITRO
-			query = "INSERT INTO " + Tablas.ARBITRO_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.ARBITRO_UWU + " VALUES(?, ?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "33333333A");
@@ -611,7 +636,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// OFERTAS_RECIBE_HECHA
-			query = "INSERT INTO " + Tablas.OFERTAS_RECIBE_HECHA_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.OFERTAS_RECIBE_HECHA_UWU + " VALUES(?, ?, ?, ?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
@@ -644,7 +669,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// CONTRAOFERTAS
-			query = "INSERT INTO " + Tablas.CONTRAOFERTAS_UWU.toString() + " VALUES(?, ?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.CONTRAOFERTAS_UWU + " VALUES(?, ?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
@@ -657,7 +682,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// TIENE
-			query = "INSERT INTO " + Tablas.TIENE_UWU.toString() + " VALUES(?, ?)";
+			query = "INSERT INTO " + Tablas.TIENE_UWU + " VALUES(?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 3, OracleTypes.NUMBER);
@@ -667,7 +692,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// PISTAS
-			query = "INSERT INTO " + Tablas.PISTAS_UWU.toString() + " VALUES(?, ?, ?)";
+			query = "INSERT INTO " + Tablas.PISTAS_UWU + " VALUES(?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
@@ -683,7 +708,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// PARTIDOS_L_V_TA_TP
-			query = "INSERT INTO " + Tablas.PARTIDOS_L_V_TA_TP_UWU.toString() + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.PARTIDOS_L_V_TA_TP_UWU + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setObject(1, 1, OracleTypes.NUMBER);
@@ -713,7 +738,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// EMPRESA
-			query = "INSERT INTO " + Tablas.EMPRESA_UWU.toString() + " VALUES(?, ?, ?, ? ,?)";
+			query = "INSERT INTO " + Tablas.EMPRESA_UWU + " VALUES(?, ?, ?, ? ,?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "A1111111A");
@@ -740,7 +765,7 @@ public class SistemaTorneo
 			pstm.executeBatch();
 
 			// PATROCINA_COLABORA
-			query = "INSERT INTO " + Tablas.PATROCINA_COLABORA_UWU.toString() + " VALUES(?, ?, ?, ?)";
+			query = "INSERT INTO " + Tablas.PATROCINA_COLABORA_UWU + " VALUES(?, ?, ?, ?)";
 			pstm = con.prepareStatement(query);
 
 			pstm.setString(1, "A1111111A");
@@ -783,7 +808,9 @@ public class SistemaTorneo
 			query = Files.readString(Path.of(basePath + "rs12.sql"));
 			stm.executeUpdate(query);
 
-			//
+			// RS2.1
+			query = Files.readString(Path.of(basePath + "rs21.sql"));
+			stm.executeUpdate(query);
 
 			// RS3.1
 			query = Files.readString(Path.of(basePath + "rs31.sql"));
@@ -913,7 +940,54 @@ public class SistemaTorneo
 	{
 		try
 		{
+			String query;
+			PreparedStatement pstm;
+			ResultSet rs;
+
+			int codCompra, codCompraPagada = 5;
+			float cantidadPagada;
+
+			// Obtener CodCompra
+			query = "SELECT CodCompra FROM " + Tablas.COMPRAFINALIZADA_UWU + " WHERE CodCompraFinalizada = ?";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, codCompraFinalizada, OracleTypes.NUMBER);
+			rs = pstm.executeQuery();
+
+			rs.next();
+			codCompra = rs.getInt(1);
+
+			// Obtener la cantidad total pagada
+			query = "SELECT SUM(CANTIDAD*PRECIO) FROM (" +
+					"SELECT * FROM " + Tablas.TIENEENTRADAS_UWU + " TE," + Tablas.EMITIDAEN_UWU + " EE, " +
+					"(SELECT CodEdicion FROM " + Tablas.COMPRA_REALIZA_ENEDICION_UWU + " where CodCompra = ?) CRE" +
+					" WHERE TE.CodEntrada = EE.CodEntrada AND EE.CodEdicion = CRE.CodEdicion AND CodCompra = ?" +
+					")";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, codCompra, OracleTypes.NUMBER);
+			pstm.setObject(2, codCompra, OracleTypes.NUMBER);
+			rs = pstm.executeQuery();
+
+			rs.next();
+			cantidadPagada = rs.getFloat(1);
+
+			// Insertar en la tabla
+			query = "INSERT INTO " + Tablas.COMPRAPAGADA_UWU + " VALUES(?, ?, ?, ?)";
+			pstm = con.prepareStatement(query);
+
+			pstm.setObject(1, codCompra, OracleTypes.NUMBER);
+			pstm.setObject(2, codCompraFinalizada, OracleTypes.NUMBER);
+			pstm.setObject(3, codCompraPagada, OracleTypes.NUMBER);
+			pstm.setDate(4, new java.sql.Date(new java.util.Date(System.currentTimeMillis()).getTime()));
+			pstm.execute();
+
 			con.commit();
+
+			// Mostrar el total pagado y el codCompra
+			System.out.println();
+			System.out.println(ConsoleColors.WHITE_BOLD + "CodCompra: " + Integer.toString(codCompra));
+			System.out.println("Total Pagado: " + Float.toString(cantidadPagada) + ConsoleColors.RESET);
 		}
 		catch (Exception e)
 		{
