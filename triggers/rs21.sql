@@ -9,6 +9,9 @@
 --insert into comprapagada_uwu values(11, 11, 11, to_date('20/12/2022', 'DD/MM/YYYY'));
 --insert into comprapagada_uwu values(11, 11, 11, to_date('21/12/2022', 'DD/MM/YYYY'));
 
+/*
+
+FORMA 1
 CREATE OR REPLACE TRIGGER compraPagadaFecha
 	BEFORE
 	INSERT ON COMPRAPAGADA_UWU
@@ -37,4 +40,25 @@ BEGIN
             raise_application_error(-20575, 'El espectador ' || DNI_ESPECTADOR || ' ya ha pagado una compra hoy: ' || registroPagada.CodCompraPagada);
         END IF;
     END LOOP;
+END compraPagadaFecha;
+ */
+
+CREATE OR REPLACE TRIGGER compraPagadaFecha
+	BEFORE
+	INSERT ON COMPRAPAGADA_UWU
+    FOR EACH ROW
+DECLARE
+    DNI_ESPECTADOR CHAR(9);
+    fechaPagada CHAR(10);
+    numPagadas INTEGER;
+BEGIN
+    SELECT DNI INTO DNI_ESPECTADOR FROM COMPRA_REALIZA_ENEDICION_UWU WHERE CodCompra = :NEW.CodCompra;
+    fechaPagada := to_char(:NEW.FechaPagos, 'DD/MM/YYYY');
+
+    SELECT COUNT(*) INTO numPagadas FROM (SELECT CodCompra FROM COMPRA_REALIZA_ENEDICION_UWU where DNI = DNI_ESPECTADOR) CRE,
+    COMPRAPAGADA_UWU CP WHERE CRE.CodCompra = CP.CodCompra AND to_char(CP.FechaPagos, 'DD/MM/YYYY') = fechaPagada;
+
+    IF numPagadas > 0 THEN
+        raise_application_error(-20575, 'El espectador ' || DNI_ESPECTADOR || ' ya ha pagado una compra hoy');
+    END IF;
 END compraPagadaFecha;
